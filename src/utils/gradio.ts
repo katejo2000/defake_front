@@ -1,37 +1,41 @@
-import {Client} from "@gradio/client";
+import {Client, handle_file} from "@gradio/client";
+// import video1 from '../assets/mqzvfufzoq.mp4';
+import video2 from '../assets/lynaeydofd.mp4';
+import videoEx from '../assets/deepfake_ex1.mp4';
 
-export default async function GetLog() {
-    try {
-        // const app = await Client.connect("abidlabs/en2fr");
-        // const result = await app.predict("/predict", ["Hello"]);
-        // return await result;
 
-        const app = await Client.connect("katejo2000/defake_test");
+export async function GetVideoResult() {
+    // const response = await fetch(videoEx);
+    const response = await fetch(video2);
+    const videoBlob = await response.blob();
 
-        const result = await app.predict(
-            "/predict", {
-                name: "경현",
-            });
-        return await result;
+    const videoFileObj = new File([videoBlob], 'deepfake_ex1.mp4', {type: 'video/mp4'});
 
-    } catch (error) {
-        throw error;
-    }
+    const app = await Client.connect("Jeonghwanny/deepfake_detection");
+
+    return await app.predict(
+        "/predict", {
+            file_obj: {
+                "video": handle_file(videoFileObj),
+                "subtitles": null
+            },
+        });
 }
 
-// export default async function GetResult() {
-//     const response = await fetch(
-//             "https://github.com/audio-samples/audio-samples.github.io/raw/master/samples/wav/ted_speakers/SalmanKhan/sample-1.wav",
-//             {
-//                 mode: 'no-cors'
-//             }
-//         );
-//     const audio_file = await response.blob();
-//
-//     const app = await Client.connect("abidlabs/whisper");
-//
-//     const transcription = await app.predict("/predict", [handle_file(audio_file)]);
-//
-//     console.log(transcription.data);
-//     ["I said the same phrase 30 times."]
-// }
+export async function GetAudioResult() {
+    // const response = await fetch(videoEx);
+    const response = await fetch(video2);
+    const videoBlob = await response.blob();
+
+    const videoFileObj = new File([videoBlob], 'deepfake_ex1.mp4', {type: 'video/mp4'});
+
+    const app = await Client.connect("sssssungk/DeepFakeVideo");
+
+    return await app.predict(
+        "/predict", {
+            video_file: {
+                "video": handle_file(videoFileObj),
+                "subtitles": null
+            },
+        });
+}

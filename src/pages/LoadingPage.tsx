@@ -14,7 +14,7 @@ export default function LoadingPage() {
             <Typography variant="h2" sx={{ mt: 2 }}>
                 Detecting...
             </Typography>
-            <CircularProgress size={60} style={{padding: 50}}/>
+            <CircularProgress size={60} style={{padding: 80}}/>
             <Typography variant="h6" sx={{ mt: 2 }}>
                 Checking for deep fake frames...
             </Typography>

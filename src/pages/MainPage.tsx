@@ -1,6 +1,6 @@
 import {useNavigate} from 'react-router-dom';
 import {Button, FormControl, Input, MenuItem, Select, Stack, Typography} from "@mui/material";
-import GetLog from "../utils/gradio.ts";
+import {GetAudioResult, GetVideoResult} from "../utils/gradio.ts";
 
 
 export default function MainPage() {
@@ -8,16 +8,28 @@ export default function MainPage() {
 
     const handleDetect = () => {
         navigate('/loading');
-        GetLog().then(result => {
-            navigate('/result', {state: {data: result}});
-            console.log(result);
+
+        Promise.all([
+            GetAudioResult(),
+            GetVideoResult()
+        ]).then(([audioResult, videoResult]) => {
+            navigate('/result', {
+                state: {
+                    audioData: audioResult,
+                    videoData: videoResult
+                }
+            });
+        }).catch(error => {
+            console.error('Error getting results:', error);
+            navigate('/error')
         });
     }
 
     return (
         <>
-            <h1>DeFake</h1>
-            <p>Upload a video and select a model to check for Deepfake results.</p>
+            <h1 style={{margin: 60}}>DeFake</h1>
+            <Typography style={{margin: 40, fontSize: 20}}>Upload a video and select a model to check for Deepfake
+                results.</Typography>
             <FormControl sx={{display: "block"}}>
                 <Stack direction={"row"} style={{padding: 10, justifyContent: "center"}}>
                     <Typography style={{padding: 10, width: 50}}>URL</Typography>
