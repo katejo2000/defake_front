@@ -2,40 +2,16 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {Button, Stack, Typography} from "@mui/material";
 import NoDeepFakeResult from "../components/NoDeepFakeResult.tsx";
 import DeepFakeResult from "../components/DeepFakeResult.tsx";
+import {AudioFake, VideoFake} from "../types/audioFake.ts";
+import {fromAudioGetAudioFake, fromVideoGetVideoFake} from "../utils/gradio.ts";
 
 export default function ResultPage() {
-
     const location = useLocation();
     const navigate = useNavigate();
+    const {audio, video} = location.state || {};
 
-    let isMultiplePerson = false;
-
-    const {audioData, videoData} = location.state || {};
-
-    let isAudioFake: number = +audioData?.data[0].slice(20, 21);
-    let audioResult: number = +audioData?.data[0].slice(32, 36);
-
-    let isVideoFake: number = 0;
-    let videoResult: number[] = [];
-
-    let video: any[] = videoData?.data[0].confidences;
-    console.log(video);
-    console.log(video[0].label); // Left Person Fake Probability OR Real Probability
-
-
-    if (video[0].label === "Real Probability") {
-        videoResult.push(video[1].confidence);
-        if (video[1].confidence > 0.5) {
-            isVideoFake = 1;
-        }
-    } else {
-        isMultiplePerson = true;
-        videoResult.push(video[0].confidence, video[1].confidence);
-        if (video[0].confidence > 0.5 || video[1].confidence > 0.5) {
-            isVideoFake = 1;
-        }
-    }
-
+    let audioFake: AudioFake = fromAudioGetAudioFake(audio);
+    let videoFake: VideoFake = fromVideoGetVideoFake(video);
 
     const handleMainPage = () => {
         navigate('/');
@@ -51,18 +27,23 @@ export default function ResultPage() {
 
     return (
         <>
-            <Typography variant={"h2"} style={{margin: 20}}>Result</Typography>
+            <Typography
+                variant="h1"
+                color="primary"
+                sx={{margin: 4}}
+                fontSize={68}
+            >Result</Typography>
             {
-                (isVideoFake || isAudioFake)
+                (audioFake.isFake || videoFake.isFake)
                     ? <DeepFakeResult
-                        audio={audioResult}
-                        video={videoResult}
-                        isMultiple={isMultiplePerson}>
+                        audio={audioFake}
+                        video={videoFake}
+                    >
                     </DeepFakeResult>
                     : <NoDeepFakeResult
-                        audio={audioResult}
-                        video={videoResult}
-                        isMultiple={isMultiplePerson}>
+                        audio={audioFake}
+                        video={videoFake}
+                    >
                     </NoDeepFakeResult>
             }
 
@@ -71,15 +52,17 @@ export default function ResultPage() {
                     variant={"outlined"}
                     sx={{margin: 2}}
                     onClick={handleMainPage}
+                    size={"large"}
                 >
                     Main Page
                 </Button>
                 {
-                    (isVideoFake || isAudioFake)
+                    (audioFake.isFake || videoFake.isFake)
                         ? <Button
                             variant={"contained"}
                             sx={{margin: 2}}
                             onClick={handleFileReport}
+                            size={"large"}
                         >
                             File a Report
                         </Button>
@@ -87,6 +70,7 @@ export default function ResultPage() {
                             variant={"contained"}
                             sx={{margin: 2}}
                             onClick={handleGetCertificate}
+                            size={"large"}
                         >
                             Get Certificate
                         </Button>

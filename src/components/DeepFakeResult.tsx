@@ -1,13 +1,8 @@
 import {Button, Stack, Typography, useTheme} from "@mui/material";
-import {ImageNotSupported} from "@mui/icons-material";
+import {ResultType} from "../types/resultType.ts";
+import OriginalLinkButton from "./OriginalLinkButton.tsx";
 
-type ResultType = {
-    video: number[];
-    audio: number;
-    isMultiple: boolean;
-};
-
-export default function DeepFakeResult({video, audio, isMultiple}: ResultType) {
+export default function DeepFakeResult({video, audio}: ResultType) {
     const theme = useTheme();
 
     return (
@@ -15,15 +10,7 @@ export default function DeepFakeResult({video, audio, isMultiple}: ResultType) {
             <Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"}
                    style={{marginLeft: 200, marginBottom: 10}}>
                 <Typography style={{fontSize: 24}} color={theme.palette.error.main}>Deepfake Detected for</Typography>
-                <Button
-                    variant={"outlined"}
-                    style={{marginLeft: 20}}
-                    onClick={() => {
-                        alert("This will redirect you to... ");
-                    }}
-                >
-                    Original Link
-                </Button>
+                <OriginalLinkButton url={"www.google.com"}></OriginalLinkButton>
             </Stack>
 
             <Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"} style={{marginLeft: 150}}>
@@ -34,21 +21,21 @@ export default function DeepFakeResult({video, audio, isMultiple}: ResultType) {
 
                     <Stack direction={"row"} style={{margin: 10}} alignItems={"center"}>
                         <Typography>Video:</Typography>
-                        {isMultiple
+                        {video.isMultiple
                             ?
                             <>
                                 <Stack direction={"column"} style={{margin: 10}} alignItems={"start"}>
-                                    <Typography>Left Person: {video[0]}</Typography>
-                                    <Typography>Right Person: {video[1]}</Typography>
+                                    <Typography>Left Person: {(video.fakeProbs[0]*100).toFixed(1)}%</Typography>
+                                    <Typography>Right Person: {(video.fakeProbs[1]*100).toFixed(1)}%</Typography>
                                 </Stack>
                             </>
-                            : <Typography style={{margin: 10}}>{video[0]}</Typography>
+                            : <Typography style={{margin: 10}}>{video.fakeProbs[0]}</Typography>
                         }
                     </Stack>
 
                     <Stack direction={"row"} style={{margin: 10}} alignItems={"center"}>
-                        <Typography >Audio:</Typography>
-                        <Typography style={{margin: 10}}>{audio}</Typography>
+                        <Typography>Audio:</Typography>
+                        <Typography style={{margin: 10}}>{(+audio.fakeProbs[0] * 100).toFixed(1)}%</Typography>
                     </Stack>
 
                 </Stack>
@@ -56,23 +43,30 @@ export default function DeepFakeResult({video, audio, isMultiple}: ResultType) {
 
             {/*todo: audio to text output*/}
 
-            {/*<Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"} style={{marginLeft: 200}}>*/}
-            {/*    <Typography style={{width: 300}}>*/}
-            {/*        Audio to Text Output*/}
-            {/*    </Typography>*/}
-            {/*    <>*/}
-            {/*        <Typography style={{margin: 20}}>like it's kind of far out but what about like a bubble gum or what*/}
-            {/*            if it's something*/}
-            {/*            like a drink that you just had to take I think sometimes people feel like</Typography>*/}
-            {/*    </>*/}
-            {/*</Stack>*/}
+            <Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"} style={{marginLeft: 150}}>
+                <Typography style={{width: 300}}>
+                    Audio to Text Output
+                </Typography>
+                <>
+                    <Stack direction={"column"}>
+                        {+audio.fakeProbs[0] > 0.5 ?
+                            <Typography style={{margin: 20}}>{audio.sttOutput[0]}</Typography> : <></>}
+                        {+audio.fakeProbs[1] > 0.5 ?
+                            <Typography style={{margin: 20}}>{audio.sttOutput[1]}</Typography> : <></>}
+                    </Stack>
+                </>
+            </Stack>
+
             {/* todo: deepfake suspected frames*/}
             <Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"} style={{marginLeft: 150}}>
                 <Typography style={{width: 300}}>
                     Deepfake Suspected Frames:
                 </Typography>
                 <>
-                    <ImageNotSupported></ImageNotSupported>
+                    {/*<ImageNotSupported></ImageNotSupported>*/}
+                    {video.fakeProbs[0] > 0.5 ? <img src={video.frames[0]} alt={"image not supported"}/> : <></>}
+                    {video.fakeProbs[1] > 0.5 ? <img src={video.frames[1]} alt={"image not supported"}/> : <></>}
+
                 </>
             </Stack>
 
