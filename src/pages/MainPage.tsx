@@ -1,6 +1,7 @@
 import {useNavigate} from 'react-router-dom';
 import {Button, FormControl, Input, Stack, Typography} from "@mui/material";
 import {GetAudioResult, GetVideoResult} from "../utils/gradio.ts";
+import Title from "../components/Title.tsx";
 
 
 export default function MainPage() {
@@ -27,14 +28,7 @@ export default function MainPage() {
 
     return (
         <>
-            <Typography
-                variant="h1"
-                color="primary"
-                sx={{margin: 6}}
-                fontSize={68}
-            >
-                De-Fake
-            </Typography>
+            <Title text={"De-Fake"}></Title>
             <Typography style={{margin: 40, fontSize: 20}}>Upload a video and select a model to check for Deepfake
                 results.</Typography>
             <FormControl sx={{display: "block", margin: 2}}>

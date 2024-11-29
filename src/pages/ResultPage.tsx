@@ -1,9 +1,11 @@
 import {useLocation, useNavigate} from "react-router-dom";
-import {Button, Stack, Typography} from "@mui/material";
+import {Stack} from "@mui/material";
 import NoDeepFakeResult from "../components/NoDeepFakeResult.tsx";
 import DeepFakeResult from "../components/DeepFakeResult.tsx";
 import {AudioFake, VideoFake} from "../types/audioFake.ts";
 import {fromAudioGetAudioFake, fromVideoGetVideoFake} from "../utils/gradio.ts";
+import Title from "../components/Title.tsx";
+import LargeButton from "../components/LargeButton.tsx";
 
 export default function ResultPage() {
     const location = useLocation();
@@ -17,9 +19,9 @@ export default function ResultPage() {
         navigate('/');
     }
 
-    const handleGetCertificate = () => {
-        navigate('/');
-    }
+    // const handleGetCertificate = () => {
+    //     navigate('/');
+    // }
 
     const handleFileReport = () => {
         navigate('/');
@@ -27,12 +29,7 @@ export default function ResultPage() {
 
     return (
         <>
-            <Typography
-                variant="h1"
-                color="primary"
-                sx={{margin: 4}}
-                fontSize={68}
-            >Result</Typography>
+            <Title text={"Result"}></Title>
             {
                 (audioFake.isFake || videoFake.isFake)
                     ? <DeepFakeResult
@@ -48,32 +45,11 @@ export default function ResultPage() {
             }
 
             <Stack direction={"row"} sx={{marginTop: '50px', alignItems: 'center', justifyContent: 'center'}}>
-                <Button
-                    variant={"outlined"}
-                    sx={{margin: 2}}
-                    onClick={handleMainPage}
-                    size={"large"}
-                >
-                    Main Page
-                </Button>
+                <LargeButton func={handleMainPage} title={"Main Page"}></LargeButton>
                 {
                     (audioFake.isFake || videoFake.isFake)
-                        ? <Button
-                            variant={"contained"}
-                            sx={{margin: 2}}
-                            onClick={handleFileReport}
-                            size={"large"}
-                        >
-                            File a Report
-                        </Button>
-                        : <Button
-                            variant={"contained"}
-                            sx={{margin: 2}}
-                            onClick={handleGetCertificate}
-                            size={"large"}
-                        >
-                            Get Certificate
-                        </Button>
+                        ? <LargeButton func={handleFileReport} title={"File a Report"} contained={true}></LargeButton>
+                        : <></> // <LargeButton func={handleGetCertificate} title={"Get Certificate"}></LargeButton>
                 }
             </Stack>
         </>

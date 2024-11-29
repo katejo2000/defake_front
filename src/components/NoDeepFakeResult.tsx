@@ -1,5 +1,7 @@
-import {Button, Stack, Typography, useTheme} from "@mui/material";
+import {Stack, Typography, useTheme} from "@mui/material";
 import {ResultType} from "../types/resultType.ts";
+import {RESULT_TITLE} from "../theme/styles.ts";
+import OriginalLinkButton from "./OriginalLinkButton.tsx";
 
 export default function NoDeepFakeResult({video, audio}: ResultType) {
     const theme = useTheme();
@@ -9,19 +11,11 @@ export default function NoDeepFakeResult({video, audio}: ResultType) {
             <Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"}
                    style={{marginLeft: 200, marginBottom: 50}}>
                 <Typography style={{fontSize: 24}} color={theme.palette.primary.main}>De-Fake proved for</Typography>
-                <Button
-                    variant={"outlined"}
-                    style={{marginLeft: 20}}
-                    onClick={() => {
-                        alert("This will redirect you to... ");
-                    }}
-                >
-                    Original Link
-                </Button>
+                <OriginalLinkButton url={"www.google.com"} isDeepfake={false}></OriginalLinkButton>
             </Stack>
 
             <Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"} style={{marginLeft: 150}}>
-                <Typography>
+                <Typography sx={RESULT_TITLE}>
                     Possibility of being a Deepfake
                 </Typography>
                 <Stack direction={"column"} style={{margin: 20}}>
@@ -51,7 +45,7 @@ export default function NoDeepFakeResult({video, audio}: ResultType) {
             {/*todo: audio to text output*/}
 
             <Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"} style={{marginLeft: 150}}>
-                <Typography style={{width: 300}}>
+                <Typography sx={RESULT_TITLE}>
                     Audio to Text Output
                 </Typography>
                 <>
