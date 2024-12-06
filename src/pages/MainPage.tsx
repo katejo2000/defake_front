@@ -1,7 +1,7 @@
 import {useNavigate} from 'react-router-dom';
 import {Button, FormControl, Input, Stack, Typography} from "@mui/material";
 import {GetAudioResult, GetVideoResult} from "../utils/gradio.ts";
-import Title from "../components/Title.tsx";
+import Title from "../components/widgets/Title.tsx";
 
 
 export default function MainPage() {

@@ -23,3 +23,9 @@ export const RESULT_STACK = {
     alignItems: "center",
     marginLeft: '100px',
 }
+
+export const COMMENT = {
+    margin: '20px',
+    fontSize: '18px',
+    marginTop: '50px',
+}

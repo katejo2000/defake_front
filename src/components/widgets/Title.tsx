@@ -9,7 +9,7 @@ export default function Title({text}: TitleText) {
         <Typography
             variant="h1"
             color="primary"
-            sx={{margin: '32px'}}
+            sx={{margin: '32px', marginTop: '128px'}}
             fontSize={68}
             fontWeight={"bold"}
         >

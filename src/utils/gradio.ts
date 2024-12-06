@@ -48,6 +48,8 @@ export function fromAudioGetAudioFake(audioData: any): AudioFake {
 
     let parsedRawData: string[] = audioData.data[0].split(", '");
 
+    console.log("audio: ", parsedRawData);
+
     let realCount: number = +parsedRawData[0].split(": ")[1];
     let fakeCount: number = +parsedRawData[1].split(": ")[1];
 
@@ -75,13 +77,23 @@ export function fromVideoGetVideoFake(videoData: any): VideoFake {
     let frames: string[] = [];
     let fakeProbs: number[] = [];
 
+    console.log("video: ", videoData.data);
+
     let parsedRawProbs: any[] = videoData.data[0].confidences;
 
     let windowLeftFakeProbs: number | null = parsedRawProbs[0].confidence;
     let windowRightFakeProbs: number | null = parsedRawProbs[3].confidence;
 
-    let firstFrameUrl = videoData.data[1].url;
-    let secondFrameUrl = videoData.data[2].url;
+    let firstFrameUrl = videoData.data[1].url.split("\"")[0];
+    console.log(firstFrameUrl);
+
+    let secondFrameUrl = '';
+
+    // if (videoData.data[2].url) {
+    //     secondFrameUrl = videoData.data[2].url.split("\"")[0];
+    //     console.log(secondFrameUrl);
+    // }
+
 
     if (windowRightFakeProbs == null) { // 한 명
         isMultiple = false;
@@ -95,7 +107,7 @@ export function fromVideoGetVideoFake(videoData: any): VideoFake {
         isFake = !(windowLeftFakeProbs! < 0.5 && windowRightFakeProbs! < 0.5);
         if (isFake) {
             if (firstFrameUrl != null) frames.push(firstFrameUrl);
-            if (secondFrameUrl != null) frames.push(secondFrameUrl);
+            if (videoData.data[2].url.split("\"")[0] != null) frames.push(secondFrameUrl);
         }
     }
 

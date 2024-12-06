@@ -7,7 +7,7 @@ type TopicButton = {
 }
 export default function DeepfakeTopicButton({title, onClick}: TopicButton) {
     return (
-        <Button variant={"outlined"} style={{width: 300, marginTop: 20}} onClick={onClick}>
+        <Button variant={"outlined"} style={{width: 300, margin: 10, height: 50, fontSize: 18}} onClick={onClick}>
             {title}
         </Button>
     );

@@ -4,8 +4,8 @@ import NoDeepFakeResult from "../components/NoDeepFakeResult.tsx";
 import DeepFakeResult from "../components/DeepFakeResult.tsx";
 import {AudioFake, VideoFake} from "../types/audioFake.ts";
 import {fromAudioGetAudioFake, fromVideoGetVideoFake} from "../utils/gradio.ts";
-import Title from "../components/Title.tsx";
-import LargeButton from "../components/LargeButton.tsx";
+import Title from "../components/widgets/Title.tsx";
+import LargeButton from "../components/widgets/LargeButton.tsx";
 
 export default function ResultPage() {
     const location = useLocation();
@@ -44,7 +44,7 @@ export default function ResultPage() {
                     </NoDeepFakeResult>
             }
 
-            <Stack direction={"row"} sx={{marginTop: '50px', alignItems: 'center', justifyContent: 'center'}}>
+            <Stack direction={"row"} sx={{marginTop: '50px', marginBottom: '50px', alignItems: 'center', justifyContent: 'center'}}>
                 <LargeButton func={handleMainPage} title={"Main Page"}></LargeButton>
                 {
                     (audioFake.isFake || videoFake.isFake)

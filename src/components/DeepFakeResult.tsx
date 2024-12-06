@@ -1,29 +1,18 @@
 import {Stack, Typography, useTheme} from "@mui/material";
 import {ResultType} from "../types/resultType.ts";
-import OriginalLinkButton from "./OriginalLinkButton.tsx";
-import {HEADER_FONT_20, HEADER_FONT_28, RESULT_STACK, RESULT_TITLE} from "../theme/styles.ts";
-import DeepfakeTopicButton from "./DeepfakeTopicButton.tsx";
+import OriginalLinkButton from "./widgets/OriginalLinkButton.tsx";
+import {COMMENT, HEADER_FONT_20, HEADER_FONT_28, RESULT_STACK, RESULT_TITLE} from "../theme/styles.ts";
+import DeepfakeTopicButton from "./widgets/DeepfakeTopicButton.tsx";
 import prohibition from '../assets/prohibition.png';
+import ResultPageImage from "./widgets/ResultPageImage.tsx";
 
 export default function DeepFakeResult({video, audio}: ResultType) {
     const theme = useTheme();
 
     return (
         <div style={{}}>
-            <div style={{position: 'relative', marginLeft: 100, marginBottom: 10}}>
-                <img
-                    src={prohibition}
-                    alt="prohibition"
-                    style={{
-                        position: 'absolute',
-                        height: '400%',
-                        opacity: 0.2,
-                        left: '-40px',
-                        top: '50%',
-                        transform: 'translateY(-50%)',
-                        zIndex: 1
-                    }}
-                />
+            <div style={{position: 'relative', marginLeft: 100, marginBottom: 30}}>
+                <ResultPageImage image={prohibition} alt={"Denied"}></ResultPageImage>
                 <Stack
                     direction={"row"}
                     justifyContent={"flex-start"}
@@ -69,7 +58,8 @@ export default function DeepFakeResult({video, audio}: ResultType) {
 
                     <Stack direction={"row"} style={{margin: 10}} alignItems={"center"}>
                         <Typography sx={HEADER_FONT_20}>Audio:</Typography>
-                        <Typography sx={HEADER_FONT_20} style={{marginLeft: 30}} color={(+audio.fakeProbs[0] * 100 > 50) ? "error" : "primary"}>
+                        <Typography sx={HEADER_FONT_20} style={{marginLeft: 30}}
+                                    color={(+audio.fakeProbs[0] * 100 > 50) ? "error" : "primary"}>
                             {(+audio.fakeProbs[0] * 100).toFixed(1)}%
                         </Typography>
                     </Stack>
@@ -87,12 +77,14 @@ export default function DeepFakeResult({video, audio}: ResultType) {
                             <Typography sx={HEADER_FONT_20}
                                         style={{
                                             margin: 20,
+                                            marginLeft: 30,
                                             textAlign: "start"
                                         }}>{audio.sttOutput[0]}</Typography> : <></>}
                         {+audio.fakeProbs[1] > 0.5 ?
                             <Typography sx={HEADER_FONT_20}
                                         style={{
                                             margin: 20,
+                                            marginLeft: 30,
                                             textAlign: "start"
                                         }}>{audio.sttOutput[1]}</Typography> : <></>}
                     </Stack>
@@ -108,37 +100,35 @@ export default function DeepFakeResult({video, audio}: ResultType) {
                     {video.fakeProbs[0] > 0.5 ? <img src={video.frames[0]} alt={"image not supported"} style={{
                         maxWidth: '200px',
                         maxHeight: '200px',
-                        objectFit: 'contain'
+                        objectFit: 'contain',
+                        marginLeft: 30,
                     }}/> : <></>}
                     {video.fakeProbs[1] > 0.5 ? <img src={video.frames[1]} alt={"image not supported"} style={{
                         maxWidth: '200px',
                         maxHeight: '200px',
-                        objectFit: 'contain'
+                        objectFit: 'contain',
+                        marginLeft: 30,
                     }}/> : <></>}
                 </>
             </Stack>
 
-            <div style={{marginTop: 50}}>
-                <Typography style={{margin: 20, fontSize: 18}}>
-                    We think this video has deepfake generated content in it.
-                </Typography>
-                <Typography style={{margin: 20, fontSize: 18}}>
-                    There are several contexts that deepfake content can be used with malicious intent.
-                </Typography>
-                <Typography style={{margin: 20, fontSize: 18}}>
-                    If you think that this video is related to a certain topic, please click on the topic below.
-                </Typography>
-            </div>
+            <Typography sx={COMMENT}>
+                We think this video has deepfake generated content in it.<br/><br/>
+                There are several contexts that deepfake content can be used with malicious intent.<br/><br/>
+                If you think that this video is related to a certain topic, please click on the topic below.
+            </Typography>
 
-            <Stack direction={"column"} alignItems={"center"}>
+            <Stack direction={"column"} alignItems={"center"} style={{paddingTop: 30}}>
                 <DeepfakeTopicButton
                     onClick={() => {
+                        // https://www.kocsc.or.kr/sec/rnc/iPinCert.do?conText=%2Fmain&joinType=24&explain=true
                     }}
                     title={"Sexual Crimes"}
                 ></DeepfakeTopicButton>
                 <DeepfakeTopicButton
                     title={"Election Law Violations"}
                     onClick={() => {
+                        // https://www.kocsc.or.kr/PageLink.do
                     }}
                 ></DeepfakeTopicButton>
             </Stack>
