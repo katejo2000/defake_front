@@ -3,14 +3,14 @@ import {Stack} from "@mui/material";
 import NoDeepFakeResult from "../components/NoDeepFakeResult.tsx";
 import DeepFakeResult from "../components/DeepFakeResult.tsx";
 import {AudioFake, VideoFake} from "../types/audioFake.ts";
-import {fromAudioGetAudioFake, fromVideoGetVideoFake} from "../utils/gradio.ts";
+import {fromAudioGetAudioFake, fromVideoAudioGetReport, fromVideoGetVideoFake} from "../utils/gradio.ts";
 import Title from "../components/widgets/Title.tsx";
 import LargeButton from "../components/widgets/LargeButton.tsx";
 
 export default function ResultPage() {
     const location = useLocation();
     const navigate = useNavigate();
-    const {audio, video} = location.state || {};
+    const {audio, video, url} = location.state || {};
 
     let audioFake: AudioFake = fromAudioGetAudioFake(audio);
     let videoFake: VideoFake = fromVideoGetVideoFake(video);
@@ -19,13 +19,26 @@ export default function ResultPage() {
         navigate('/');
     }
 
-    // const handleGetCertificate = () => {
-    //     navigate('/');
-    // }
-
     const handleFileReport = () => {
-        navigate('/');
-    }
+        navigate('/download', {
+            state: {
+                isLoading: true
+            }
+        });
+        
+        fromVideoAudioGetReport(videoFake, audioFake).then(r => {
+            console.log(r);
+            navigate('/download', {
+                state: {
+                    reportData: r,
+                    isLoading: false
+                }
+            });
+        }).catch(error => {
+            console.error('Error generating report:', error);
+            navigate('/error');
+        });
+    };
 
     return (
         <>
@@ -35,16 +48,19 @@ export default function ResultPage() {
                     ? <DeepFakeResult
                         audio={audioFake}
                         video={videoFake}
+                        url={url}
                     >
                     </DeepFakeResult>
                     : <NoDeepFakeResult
                         audio={audioFake}
                         video={videoFake}
+                        url={url}
                     >
                     </NoDeepFakeResult>
             }
 
-            <Stack direction={"row"} sx={{marginTop: '50px', marginBottom: '50px', alignItems: 'center', justifyContent: 'center'}}>
+            <Stack direction={"row"}
+                   sx={{marginTop: '50px', marginBottom: '50px', alignItems: 'center', justifyContent: 'center'}}>
                 <LargeButton func={handleMainPage} title={"Main Page"}></LargeButton>
                 {
                     (audioFake.isFake || videoFake.isFake)

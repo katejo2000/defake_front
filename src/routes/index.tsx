@@ -4,6 +4,7 @@ import MainPage from "../pages/MainPage.tsx";
 import ResultPage from "../pages/ResultPage.tsx";
 import LoadingPage from '../pages/LoadingPage.tsx';
 import ErrorPage from "../pages/ErrorPage.tsx";
+import DownloadPage from '../pages/DownloadPage.tsx';
 
 export default function Router() {
     return useRoutes([
@@ -34,6 +35,10 @@ export default function Router() {
         {
             path: '/product',
             element: <MainPage/>,
+        },
+        {
+            path: '/download',
+            element: <DownloadPage/>,
         },
     ]);
 }

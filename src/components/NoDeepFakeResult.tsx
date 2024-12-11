@@ -6,7 +6,7 @@ import OriginalLinkButton from "./widgets/OriginalLinkButton.tsx";
 import checked from "../assets/checked.png";
 import ResultPageImage from "./widgets/ResultPageImage.tsx";
 
-export default function NoDeepFakeResult({video, audio}: ResultType) {
+export default function NoDeepFakeResult({video, audio, url}: ResultType) {
     const theme = useTheme();
 
     return (
@@ -26,7 +26,7 @@ export default function NoDeepFakeResult({video, audio}: ResultType) {
                     >
                         De-Fake proved for
                     </Typography>
-                    <OriginalLinkButton url={"www.google.com"} isDeepfake={false}></OriginalLinkButton>
+                    <OriginalLinkButton url={url} isDeepfake={false}></OriginalLinkButton>
                 </Stack>
             </div>
 

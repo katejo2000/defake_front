@@ -1,11 +1,12 @@
+import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Button, FormControl, Input, Stack, Typography} from "@mui/material";
 import {GetAudioResult, GetVideoResult} from "../utils/gradio.ts";
 import Title from "../components/widgets/Title.tsx";
 
-
 export default function MainPage() {
     const navigate = useNavigate();
+    const [url, setUrl] = React.useState('');
 
     const handleDetect = () => {
         navigate('/loading');
@@ -17,7 +18,8 @@ export default function MainPage() {
             navigate('/result', {
                 state: {
                     audio: audio,
-                    video: video
+                    video: video,
+                    url: url
                 }
             });
         }).catch(error => {
@@ -25,6 +27,10 @@ export default function MainPage() {
             navigate('/error')
         });
     }
+
+    const handleClear = () => {
+        setUrl('');
+    };
 
     return (
         <>
@@ -34,10 +40,19 @@ export default function MainPage() {
             <FormControl sx={{display: "block", margin: 2}}>
                 <Stack direction={"row"} style={{padding: 10, justifyContent: "center"}}>
                     <Typography style={{padding: 10, width: 50}}>URL</Typography>
-                    <Input style={{
-                        backgroundColor: '#ffffff', borderColor: '#eeeeee', width: '400px', height: '40px',
-                        borderWidth: '1px', borderRadius: '10px', paddingLeft: '10px'
-                    }}></Input>
+                    <Input
+                        value={url}
+                        onChange={(e) => setUrl(e.target.value)}
+                        style={{
+                            backgroundColor: '#ffffff',
+                            borderColor: '#eeeeee',
+                            width: '400px',
+                            height: '40px',
+                            borderWidth: '1px',
+                            borderRadius: '10px',
+                            paddingLeft: '10px'
+                        }}
+                    />
                 </Stack>
             </FormControl>
 
@@ -46,6 +61,7 @@ export default function MainPage() {
                     variant={"outlined"}
                     sx={{margin: 2}}
                     size={"large"}
+                    onClick={handleClear}
                 >
                     Clear
                 </Button>
