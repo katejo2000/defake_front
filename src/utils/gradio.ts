@@ -6,12 +6,12 @@ import real from '../assets/videos/real.mp4';
 import real_video from '../assets/videos/real_video.mp4'; //
 import fake from '../assets/videos/fake.mp4';
 import window_fake from '../assets/videos/window_fake.mp4'; //
-import real_fake_video from '../assets/videos/real_fake_video.mp4'; //
+import real_fake_video from '../assets/videos/real_fake_video.mp4'; // https://www.youtube.com/watch?v=ruMt6tLT_IA
 import real_fake_audio from '../assets/videos/real_fake_audio.mp4'; //
 
 
 export async function GetVideoResult() {
-    const response = await fetch(window_fake);
+    const response = await fetch(real_fake_video);
     const videoBlob = await response.blob();
 
     const videoFileObj = new File([videoBlob], 'deepfake_ex1.mp4', {type: 'video/mp4'});
@@ -28,7 +28,7 @@ export async function GetVideoResult() {
 }
 
 export async function GetAudioResult() {
-    const response = await fetch(window_fake);
+    const response = await fetch(real_fake_video);
     const videoBlob = await response.blob();
 
     const videoFileObj = new File([videoBlob], 'deepfake_ex1.mp4', {type: 'video/mp4'});

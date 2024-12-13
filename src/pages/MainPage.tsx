@@ -12,6 +12,7 @@ export default function MainPage() {
         navigate('/loading');
 
         Promise.all([
+            // todo: HG API for changing url -> video file
             GetAudioResult(),
             GetVideoResult()
         ]).then(([audio, video]) => {
